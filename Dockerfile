@@ -1,3 +1,3 @@
 FROM nginx:latest
 
-COPY src/. /var/www/html
+COPY src/. /usr/share/nginx/htm
