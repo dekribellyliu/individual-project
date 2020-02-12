@@ -54,8 +54,8 @@ resource "aws_ecs_task_definition" "task_definition" {
   execution_role_arn       = aws_iam_role.ecs-task-execution-role.arn # CHANGE THIS          # role for executing task
   family                   = "simple-php-web"                         # task name
   network_mode             = "awsvpc"                                 # network mode awsvpc, brigde
-  memory                   = "2048"
-  cpu                      = "1024"
+  memory                   = "256"
+  cpu                      = "0.25 vcpu"
   requires_compatibilities = ["EC2"]                                   # Fargate or EC2
   task_role_arn            = aws_iam_role.ecs-task-execution-role.arn  # CHANGE THIS # TASK running role
 } 

@@ -249,7 +249,7 @@ resource "aws_codebuild_project" "build_project" {
 
 # CREATE IAM POLICY AND ROLE CODEPIPELINE
 resource "aws_iam_role" "codepipeline_role" {
-  name = "test-role"
+  name = var.codepipeline-role
 
   assume_role_policy = <<EOF
 {
@@ -269,7 +269,7 @@ EOF
 }
 
 resource "aws_iam_role_policy" "codepipeline_policy" {
-  name = "codepipeline_policy"
+  name = var.codepipeline-policy
   role = aws_iam_role.codepipeline_role.id
 
   policy = <<EOF
@@ -292,10 +292,13 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
         "codebuild:BatchGetBuilds",
         "codebuild:StartBuild",
         "ecs:*",
-        "ec2:*"
+        "ec2:*",
+        "iam:PassRole",
+        "iam:PassedToService"
       ],
       "Resource": "*"
     }
+
   ]
 }
 EOF
