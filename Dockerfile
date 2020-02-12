@@ -1,1 +1,1 @@
-FROM wordpress:latest
+FROM nginx:latest
