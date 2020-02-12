@@ -148,7 +148,7 @@ resource "aws_iam_role_policy_attachment" "ecs-task-execution-role-attachment" {
 ##############################################################
 resource "aws_ecs_service" "service" {
   cluster                = aws_ecs_cluster.cluster.id                          # ecs cluster id
-  desired_count          = 2                                                         # no of task running
+  desired_count          = 1                                                         # no of task running
   launch_type            = "EC2"                                                     # Cluster type ECS OR FARGATE
   name                   = var.ecs-service-name                                        # Name of service
   task_definition        = aws_ecs_task_definition.task_definition.arn        # Attaching Task to service
