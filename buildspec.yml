@@ -1,0 +1,48 @@
+version: 0.2 
+phases:
+  install:
+    commands:
+      - echo install steps...  
+  pre_build:
+    commands:
+      - echo Check AWS, Git, Python version 
+      - aws --version && git --version && python --version
+      - echo Check ENV Variable
+      - printenv
+      
+      - echo scan credential info with git-secrets
+      - git clone https://github.com/awslabs/git-secrets.git
+      - cd git-secrets && make install
+      - git secrets --register-aws --global
+      - export GIT_DISCOVERY_ACROSS_FILESYSTEM=1
+      - cd $CODEBUILD_SRC_DIR && git init
+      - git secrets --scan
+      - rm -rf git-secrets 
+ 
+      - echo Logging into AWS ECR...
+      - $(aws ecr get-login --no-include-email --region ap-southeast-1)
+      - REPOSITORY_URI=954492912526.dkr.ecr.ap-southeast-1.amazonaws.com/belly-ecr
+      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      - IMAGE_TAG=${COMMIT_HASH:=latest}
+      - echo $CODEBUILD_RESOLVED_SOURCE_VERSION
+      - echo $COMMIT_HAST
+      - echo $IMAGE_TAG
+  build:
+    commands:
+      - echo Building the Docker image...
+      - docker build -t $REPOSITORY_URI:latest -f Dockerfile .
+      - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG 
+      - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:latest
+      
+  post_build:
+    commands:
+      - echo push latest Docker images to ECR...
+      - docker push $REPOSITORY_URI:$IMAGE_TAG
+      - docker push $REPOSITORY_URI:latest
+      - echo Writing Image Definitions File...
+      - printf '[{"name":"simple-php-web","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > updateTask.json
+      - cat updateTask.json
+artifacts:
+  files:
+      - updateTask.json
+

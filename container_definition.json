@@ -1,0 +1,21 @@
+[
+  {
+     "name": "simple-php-web",
+     "image": "954492912526.dkr.ecr.ap-southeast-1.amazonaws.com/belly-ecr:latest", 
+      "cpu": 50,
+      "memory": 128,
+      "links": [],
+      "portMappings": [
+          { 
+              "containerPort": 80,
+              "protocol": "tcp"
+          }
+      ],
+      "essential": true,
+      "entryPoint": [],
+      "command": [],
+      "environment": [],
+      "mountPoints": [],
+      "volumesFrom": []
+  }
+]

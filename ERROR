@@ -1,0 +1,3 @@
+1. deployment fail because output buildartifact updateTask.json fail < DONE karena salah syntax yang benar = printf '[{"name":"simple-php-web","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > updateTask.json . imageUri bukan ImageURI
+2. git source setiap push , maka git token yang di aws akan ter revoke otomatis, jadi harus update variable terraform github_token < DONE = ter revoke otomatis karena git hub token yg di variables.tf ada github token nya. Kalau di push ke git hub, makan akan revoke. Maka variables.tf harus di ignore.
+3. target group selalu unhealthy 302 < DONE
